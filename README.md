@@ -187,6 +187,7 @@ Features
 	fixed:		Textline_SetText ignored the #TE_Styling_NoUndo flag
 	fixed:		Editor_Activate's cursor-thread creation was not mutex protected
 	fixed:		Cursor_Thread didn't reset the shared thread handle when exiting on its own
+	fixed:		PBEdit_SetCursorPosition Scroll the view while moving the logical cursor and flag lines
 	changed:	ClipBoard_Paste now exits early in read-only mode (no more pointless "large paste" warning)
 	changed:	throttled Autocomplete_UpdateDictonary to avoid a full-document rescan on every keystroke
 	added:		PBEdit_SetReadOnly(ID, Value): convenience wrapper for #TE_EnableReadOnly
