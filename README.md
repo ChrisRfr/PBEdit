@@ -166,3 +166,28 @@ Features
 	issues:		strong flashing of the screen when resizing a splitted view with the splitterbar
 				sometimes the "Unsplit View" function is not working correctly
 				'remark textlines' and 'word wrapping' is in an experimental stage and are not working correctly
+
+	v1.15 : ChrisR in collaboration with Claude Claude, awaiting Mr.L's approval - 2026-09-18
+	fixed:		Fire the real #PB_EventType_KeyDown Keyboard event for #VK_TAB (was swallowed before reaching the canvas)
+	fixed:		crash in Editor_Free (WaitThread on a null thread if freed before ever being activated)
+	fixed:		Editor_Free stopped the cursor blink of a different, still-active editor
+	fixed:		Editor_Free / View_Delete never freed the root view (and child views after a split): memory leak
+	fixed:		crash in Draw() from a stale posted #TE_Event_Redraw / #TE_Event_CursorBlink event after Editor_Free
+	fixed:		regExRepeatedSelection / regExFind handles not reset to 0 after freeing (stale #PB_Any handle risk)
+	fixed:		regExDictionary was never freed in Editor_Free: 3rd leaked regex handle
+	fixed:		Find_Next used the flag constant #TE_Find_RegEx instead of the real regex handle: regex search almost never matched
+	fixed:		potential infinite loop in Replace All on a zero-length regex match
+	fixed:		PBEdit_SetGadgetText / PBEdit_SetText polluted the Undo/Redo history on repeated calls
+	fixed:		PBEdit_SetGadgetItemText / PBEdit_RemoveGadgetItem / PBEdit_AddGadgetItem never cleared the Redo list after an edit
+	fixed:		PBEdit_ClearGadgetItems left stale Undo/Redo history after clearing the document
+	fixed:		PBEdit_SetRemark's undo entry wasn't grouped: a single Ctrl+Z could undo an unrelated prior edit
+	fixed:		PBEdit_AddGadgetItem used an uninitialized variable, breaking appends past the last line
+	fixed:		PBEdit_SetReadOnly always returned 0 instead of the previous value
+	fixed:		Cursor_MoveMulti could desync a cursor's lineNr/charNr from its \textline pointer
+	fixed:		Textline_SetText ignored the #TE_Styling_NoUndo flag
+	fixed:		Editor_Activate's cursor-thread creation was not mutex protected
+	fixed:		Cursor_Thread didn't reset the shared thread handle when exiting on its own
+	changed:	ClipBoard_Paste now exits early in read-only mode (no more pointless "large paste" warning)
+	changed:	throttled Autocomplete_UpdateDictonary to avoid a full-document rescan on every keystroke
+	added:		PBEdit_SetReadOnly(ID, Value): convenience wrapper for #TE_EnableReadOnly
+	added:		guard against width/height < 1 in PBEdit_Gadget / PBEdit_Resize
