@@ -186,6 +186,7 @@
 ;	fixed:		Cursor_MoveMulti could desync a cursor's lineNr/charNr from its \textline pointer
 ;	fixed:		Textline_SetText ignored the #TE_Styling_NoUndo flag
 ;	fixed:		Editor_Activate's cursor-thread creation was not mutex protected
+;	fixed:		PBEdit_SetCursorPosition Scroll the view while moving the logical cursor and flag lines
 ;	fixed:		Cursor_Thread didn't reset the shared thread handle when exiting on its own
 ;	changed:	ClipBoard_Paste now exits early in read-only mode (no more pointless "large paste" warning)
 ;	changed:	throttled Autocomplete_UpdateDictonary to avoid a full-document rescan on every keystroke
@@ -12417,7 +12418,7 @@ Module PBEdit
     Protected *te.TE_STRUCT = PBEdit_IsGadget(ID)
     If *te
       Cursor_Position(*te, *te\currentCursor, LineNr, charNr)
-      ; MyFix: Scroll the view while moving the logical cursor and mark the lines using Cursor_Position()/Cursor_Update().
+      ; MyFix: Scroll the view while moving the logical cursor and flag lines using Cursor_Position()/Cursor_Update().
       Scroll_Update(*te, *te\currentView, *te\currentCursor, -1, -1)
       PBEdit_Redraw(*te)
     EndIf
@@ -12432,7 +12433,7 @@ Module PBEdit
       Else
         Selection_SetRange(*te, *te\currentCursor, LineNr, charNr)
       EndIf
-      ; MyFix: Scroll the view while moving the logical cursor and mark the lines using Cursor_Position()/Cursor_Update().
+      ; MyFix: Scroll the view while moving the logical cursor and flag lines using Cursor_Position()/Cursor_Update().
       Scroll_Update(*te, *te\currentView, *te\currentCursor, -1, -1)
       PBEdit_Redraw(*te)
     EndIf
