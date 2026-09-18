@@ -1469,7 +1469,7 @@ Module _PBEdit_
     
     ; MyFix: register *te as live before Editor_Activate() below can post an event for it.
     LockMutex(_PBEdit_Mutex)
-    _PBEdit_LiveEditors(Str(*te)) = #True ; direct assignment auto-creates the entry - no need for FindMapElement() first
+    _PBEdit_LiveEditors(Str(*te)) = #True ; MyFix: direct assignment auto-creates the entry - no need for FindMapElement() first
     UnlockMutex(_PBEdit_Mutex)
     
     Protected key$ = Hex(WindowID(window))
@@ -1784,7 +1784,7 @@ Module _PBEdit_
     
     ; MyFix: register *view as live.
     LockMutex(_PBEdit_Mutex)
-    _PBEdit_LiveViews(Str(*view)) = #True ; direct assignment auto-creates the entry - no need for FindMapElement() first
+    _PBEdit_LiveViews(Str(*view)) = #True ; MyFix: direct assignment auto-creates the entry - no need for FindMapElement() first
     UnlockMutex(_PBEdit_Mutex)
     
     If *te\currentCursor
@@ -12417,6 +12417,8 @@ Module PBEdit
     Protected *te.TE_STRUCT = PBEdit_IsGadget(ID)
     If *te
       Cursor_Position(*te, *te\currentCursor, LineNr, charNr)
+      ; MyFix: Scroll the view while moving the logical cursor and mark the lines using Cursor_Position()/Cursor_Update().
+      Scroll_Update(*te, *te\currentView, *te\currentCursor, -1, -1)
       PBEdit_Redraw(*te)
     EndIf
   EndProcedure
@@ -12430,6 +12432,8 @@ Module PBEdit
       Else
         Selection_SetRange(*te, *te\currentCursor, LineNr, charNr)
       EndIf
+      ; MyFix: Scroll the view while moving the logical cursor and mark the lines using Cursor_Position()/Cursor_Update().
+      Scroll_Update(*te, *te\currentView, *te\currentCursor, -1, -1)
       PBEdit_Redraw(*te)
     EndIf
   EndProcedure
